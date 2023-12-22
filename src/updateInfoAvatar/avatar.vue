@@ -46,6 +46,9 @@ const handleChange = (info: any) => {
   if (status === "uploading") {
     loading.value = true;
   }
+  if(status  == 'error'){
+    loading.value = false;
+  }
   if (status === "done") {
     console.log(info.file.response, "response");
     //修改pinia中avatarUrl来回显

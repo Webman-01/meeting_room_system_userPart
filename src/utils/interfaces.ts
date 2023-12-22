@@ -13,7 +13,7 @@ async function refreshToken(){
   //获取localStorage中的refresh_token发起刷新token请求获取新的access_token和refresh_token
   const res = await axiosInstance.get('/user/refresh',{
     params:{
-      refresh_token:localStorage.getItem('refresh_token')
+      refreshToken:localStorage.getItem('refresh_token')
     }
   })
   const { data } = res.data
@@ -55,6 +55,8 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error)
     }
     let { data,config } = error.response
+    console.log(data,'---------');
+    
 
     // 如果正在刷新 Token，将当前请求加入队列，等待刷新完成后重新发送
     if(refreshing){
@@ -67,6 +69,8 @@ axiosInstance.interceptors.response.use(
     }
     // 当响应码是 401 且没有发送刷新请求的时候，就刷新 token，刷新失败提示错误信息，然后跳到登录页
     if(data.code == 401 && !config.url.includes('/user/refresh')){
+      console.log(config,'config');
+      
       refreshing = true// 标记正在刷新 Token
       const res = await refreshToken()
       refreshing = false// 标记刷新完成
@@ -76,6 +80,7 @@ axiosInstance.interceptors.response.use(
         queue.forEach(({config,resolve})=>{
           resolve(axiosInstance(config))
         })
+        return axiosInstance(config);
       }else{
         message.error(res.data)
         setTimeout(()=>{

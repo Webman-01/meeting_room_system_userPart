@@ -73,7 +73,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, watchEffect, watchPostEffect } from "vue";
 import {
   getUserInfo,
   updateUserInfo,
@@ -121,8 +121,8 @@ async function sendCaptcha() {
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
-//挂载完毕把当前的用户信息展示在表格中
-onMounted(async () => {
+//挂载时开始监听把当前的用户信息展示在表格中
+watchEffect(async () => {
   try {
     const res = await getUserInfo();
     const { data } = res.data;
