@@ -4,22 +4,34 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path:'/layout',
-      name:'layout',
-      component:()=>import('@/layout/layout.vue'),
-      children:[
+      path: "/",
+      name: "layout",
+      component: () => import("@/layout/layout.vue"),
+      children: [
         {
           //配置二级路由不加/
-          path:'update_info',
-          name:'update_info',
-          component:()=>import('../views/updateInfo.vue')
-        }
-      ]
-    },
-    {
-      path: "/",
-      name: "home",
-      component: () => import("../views/index.vue"),
+          path: "update_info",
+          name: "update_info",
+          component: () => import("../views/updateInfo.vue"),
+        },
+        {
+          path: "menu",
+          name: "menu",
+          component: () => import("../views/menu.vue"),
+          children: [
+            {
+              path: "meeting_room_list",
+              name: "meetingRoomList",
+              component: () => import("../views/meetingRoomList.vue"),
+            },
+            {
+              path: "booking_history",
+              name: "bookingHistory",
+              component: () => import("../views/bookingHistory.vue"),
+            },
+          ],
+        },
+      ],
     },
     {
       path: "/login",

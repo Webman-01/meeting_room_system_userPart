@@ -2,7 +2,7 @@
   <div class="layout">
     <div class="header">
       <h1>会议室预订系统</h1>
-      <router-link to="/layout/update_info"><UserOutlined class="icon"/></router-link>
+      <router-link to="/update_info"><UserOutlined class="icon"/></router-link>
     </div>
     <div class="body">
       <router-view></router-view>
@@ -23,8 +23,9 @@ import { UserOutlined } from "@ant-design/icons-vue";
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
+    padding: 0px 40px;
     border-bottom: 1px solid #e6e8eb;
+    height: 60px;
     .icon{
       font-size: 40px;
     }
