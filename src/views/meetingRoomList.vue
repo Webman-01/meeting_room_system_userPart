@@ -53,11 +53,11 @@
           </template>
           <!-- 更新时间 -->
           <template v-if="column.dataIndex === 'updateTime'">
-            <div>{{ formatTime(record.updateTime) }}</div>
+            <div @click="print(record)">{{ formatTime(record.updateTime) }}</div>
           </template>
           <!-- 操作 -->
           <template v-else-if="column.dataIndex === 'operate'">
-            <a-tag color="cyan">预订</a-tag>
+            <Modal :name="record.name" :meetingRoomId="record.id"/>
           </template>
         </template>
       </a-table>
@@ -72,6 +72,14 @@
   </div>
 </template>
 <script lang="ts" setup>
+//测试
+const print = (record:any)=>{
+  console.log(record);
+  console.log(JSON.parse((localStorage.getItem('user_info')) as string).id);
+  
+  
+}
+import Modal from "../components/Modal.vue";
 import moment from "moment";
 import { reactive, ref, watchEffect } from "vue";
 import { message } from "ant-design-vue";
@@ -98,7 +106,7 @@ const pageSize = ref(6);
 const totalCount = ref(0);
 const meetingRoomResult = ref([]);
 //会议室列表返回的数据
-interface MeetingRoomSearchResult {
+export interface MeetingRoomSearchResult {
   id: number;
   name: string;
   capacity: string;
@@ -140,7 +148,6 @@ const getMeetingRoomList = async () => {
 watchEffect(async () => {
   //调用接口函数获取页面信息
   getMeetingRoomList();
-  console.log(meetingRoomResult, "datasource");
 });
 
 //格式化时间

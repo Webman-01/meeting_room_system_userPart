@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
+    "@vueuse/core": "^10.7.2",
     "ant-design-vue": "^4.0.7",
     "axios": "^1.6.2",
     "moment": "^2.29.4",

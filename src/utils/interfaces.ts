@@ -5,6 +5,9 @@ import type {
   UserInfo,
 } from "../types/user.types";
 import { message } from "ant-design-vue";
+import type { SearchBookingData } from "@/views/bookingHistory.vue";
+import dayjs from "dayjs";
+import type { CreateBooking } from "@/types/booking.types";
 
 //创建axios实例
 const axiosInstance = axios.create({
@@ -31,11 +34,8 @@ async function refreshToken() {
 axiosInstance.interceptors.request.use(function (config) {
   //从localStorage中获取access_token
   const accessToken = localStorage.getItem("access_token");
-  console.log(accessToken, "access_token");
 
   //添加给header
-  console.log(config, "interface-config");
-
   if (accessToken) {
     config.headers.authorization = "Bearer " + accessToken;
   }
@@ -59,7 +59,6 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
     let { data, config } = error.response;
-    console.log(data, "---------");
 
     // 如果正在刷新 Token，将当前请求加入队列，等待刷新完成后重新发送
     if (refreshing) {
@@ -150,5 +149,61 @@ export async function meetingRoomList(
       pageNo,
       pageSize,
     },
+  });
+}
+//获取用户预订列表
+export async function bookingList(
+  searchBooking: SearchBookingData,
+  pageNo: number,
+  pageSize: number
+) {
+  let bookingTimeRangeStart;
+  let bookingTimeRangeEnd;
+  if (searchBooking.rangeStartTime) {
+    bookingTimeRangeStart = dayjs(
+      dayjs(searchBooking.rangeStartTime).format("YYYY-MM-DD HH:mm:ss")
+    ).valueOf();
+  }
+  if (searchBooking.rangeEndTime) {
+    bookingTimeRangeEnd = dayjs(
+      dayjs(searchBooking.rangeEndTime).format("YYYY-MM-DD HH:mm:ss")
+    ).valueOf();
+  }
+  return await axiosInstance.get("/booking/list", {
+    params: {
+      username: searchBooking.username,
+      meetingRoomName: searchBooking.meetingRoomName,
+      meetingRoomPosition: searchBooking.meetingRoomPosition,
+      bookingTimeRangeStart,
+      bookingTimeRangeEnd,
+      pageNo: pageNo,
+      pageSize: pageSize,
+    },
+  });
+}
+//解除预订
+export async function unbind(id: number) {
+  return await axiosInstance.get("/booking/unbind/" + id);
+}
+//添加会议室
+export async function bookingAdd(booking: CreateBooking,userId:number) {
+  let bookingTimeRangeStart;
+  let bookingTimeRangeEnd;
+  if (booking.rangeStartTime) {
+    bookingTimeRangeStart = dayjs(
+      dayjs(booking.rangeStartTime).format("YYYY-MM-DD HH:mm:ss")
+    ).valueOf();
+  }
+  if (booking.rangeEndTime) {
+    bookingTimeRangeEnd = dayjs(
+      dayjs(booking.rangeEndTime).format("YYYY-MM-DD HH:mm:ss")
+    ).valueOf();
+  }
+  return await axiosInstance.post("/booking/add", {
+    meetingRoomId: booking.meetingRoomId,
+    startTime: bookingTimeRangeStart,
+    endTime: bookingTimeRangeEnd,
+    text: booking.text,
+    id:userId
   });
 }

@@ -28,6 +28,7 @@ import { UserOutlined } from "@ant-design/icons-vue";
     height: 60px;
     .icon{
       font-size: 40px;
+      color: black;
     }
   }
 }

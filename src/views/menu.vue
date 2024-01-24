@@ -38,8 +38,8 @@
     {
       key: "2",
       icon: () => h(DesktopOutlined),
-      label: "预订系统",
-      title: "预订系统",
+      label: "预订历史",
+      title: "预订历史",
     },
   ]);
   watch(
