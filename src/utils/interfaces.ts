@@ -71,7 +71,7 @@ axiosInstance.interceptors.response.use(
     }
     // 当响应码是 401 且没有发送刷新请求的时候，就刷新 token，刷新失败提示错误信息，然后跳到登录页
     if (data.code == 401 && !config.url.includes("/user/refresh")) {
-      console.log(config, "config");
+      // console.log(config, "config");
 
       refreshing = true; // 标记正在刷新 Token
       const res = await refreshToken();

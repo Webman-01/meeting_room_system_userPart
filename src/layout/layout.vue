@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <div class="header">
-      <router-link to="/menu"><h1>会议室预订系统</h1></router-link>
+      <router-link to="/menu/meeting_room_list"><h1>会议室预订系统</h1></router-link>
       <router-link to="/update_info">
         <!-- 头像组件 -->
         <a-dropdown placement="bottom">
@@ -11,6 +11,12 @@
             <a-menu>
               <a-menu-item>
                 <a href="javascript:;" @click="logout">退出登录</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a href="javascript:;">修改信息</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a href="javascript:;">修改密码</a>
               </a-menu-item>
             </a-menu>
           </template>

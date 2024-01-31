@@ -24,19 +24,19 @@
   import { useRoute, useRouter } from "vue-router";
   const state = reactive({
     collapsed: false,
-    selectedKeys: ["1"],
-    openKeys: ["sub1"],
-    preOpenKeys: ["sub1"],
+    selectedKeys: ["0"],
+    openKeys: ["sub0"],
+    preOpenKeys: ["sub0"],
   });
   const items = reactive([
     {
-      key: "1",
+      key: "0",
       icon: () => h(PieChartOutlined),
       label: "会议室列表",
       title: "会议室列表",
     },
     {
-      key: "2",
+      key: "1",
       icon: () => h(DesktopOutlined),
       label: "预订历史",
       title: "预订历史",
@@ -52,14 +52,14 @@
   const $route = useRoute();
   //挂载后根据路由来渲染选中的是菜单栏中哪个
   watchEffect(() => {
-    state.selectedKeys = $route.path == "/menu/meeting_room_list" ? ["1"] : ["2"];
+    state.selectedKeys = $route.path == "/menu/meeting_room_list" ? ["0"] : ["1"];
   });
   //点击左边栏跳转路由
   const changeRoute = (e: any) => {
     //获取事件对象
-    console.log(e);
+    // console.log(e);
     state.selectedKeys[0] = e.key;
-    if (e.key == "1") {
+    if (e.key == "0") {
       $router.push("/menu/meeting_room_list");
     } else {
       $router.push("/menu/booking_history");
