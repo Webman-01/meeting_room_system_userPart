@@ -10,7 +10,7 @@
       "
       :hoverable="true"
     >
-      <h1 class="title">会议室预订系统</h1>
+      <h1 class="title" :style="{ color: themeColor.themeColor }">会议室预订系统</h1>
       <a-form
         :model="formState"
         :colon="false"
@@ -101,6 +101,7 @@ import {
 import { message } from "ant-design-vue";
 import type { UpdatePassword } from "../types/user.types";
 import { useRouter } from "vue-router";
+import { useThemeStore } from "@/stores/themeToggle";
 
 let $router = useRouter();
 const formState = reactive<UpdatePassword>({
@@ -142,6 +143,7 @@ async function sendCaptcha() {
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
+const themeColor = useThemeStore()
 </script>
 
 <style lang="scss" scoped>

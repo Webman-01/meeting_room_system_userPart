@@ -73,7 +73,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, reactive, watchEffect, watchPostEffect } from "vue";
+import { reactive, watchEffect } from "vue";
 import {
   getUserInfo,
   updateUserInfo,

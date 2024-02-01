@@ -10,8 +10,9 @@
       "
       :hoverable="true"
     >
-      <h1 class="title">会议室预订系统</h1>
+      <h1 class="title" :style="{ color: themeColor.themeColor }">会议室预订系统</h1>
       <a-form
+      ref="formRef"
         :model="formState"
         :colon="false"
         :label-col="{ span: 6 }"
@@ -40,7 +41,7 @@
         <a-form-item
           label="密码"
           name="password"
-          :rules="[{ required: passwordFlag, message: '请输入6-12位且含有字母数字的密码' }]"
+          :rules="[{ required: passwordFlag ,trigger: 'change',validator: validatePass}]"
         >
           <a-input-password v-model:value="formState.password" placeholder="请输入6-12位且含有字母数字的密码" @change="changePassword(formState.password)"/>
         </a-form-item>
@@ -49,7 +50,7 @@
           label="确认密码"
           name="confirmPassword"
           v-model:value="formState.confirmPassword"
-          :rules="[{ required: confirmPasswordFlag, message: '请再次输入密码' }]"
+          :rules="[{ required: confirmPasswordFlag,trigger: 'change',validator: validatePass2 }]"
         >
           <a-input-password v-model:value="formState.confirmPassword" @change="changeConfirmPassword(formState.confirmPassword)"/>
         </a-form-item>
@@ -101,6 +102,8 @@ import { register, registerCaptcha } from ".././utils/interfaces";
 import { message } from "ant-design-vue";
 import type { RegisterUser } from "../types/user.types";
 import { useRouter } from "vue-router";
+import { useThemeStore } from "@/stores/themeToggle";
+import type { Rule } from 'ant-design-vue/es/form';
 
 let $router = useRouter()
 const formState = reactive<RegisterUser>({
@@ -112,6 +115,33 @@ const formState = reactive<RegisterUser>({
   captcha: "",
 });
 
+//密码校验
+const formRef = ref<any>();
+const validatePass = async (_rule: Rule, value:string) => {
+  //检查密码是否为空
+  if(value === ''){
+    return Promise.reject('密码不能为空')
+  }
+  //检查密码是否满足要求
+  else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,12}$/.test(value)) {
+    return Promise.reject('请输入6-12位且包含字母和数字的密码');
+  } else {
+    //检查当密码满足条件且再次输入的密码不为空时再次触发再次输入的表单验证
+    if (formState.confirmPassword !== '') {
+      formRef.value.validateFields('confirmPassword');
+    }
+    return Promise.resolve();
+  }
+};
+const validatePass2 = async (_rule: Rule, value: string) => {
+  if (value === '') {
+    return Promise.reject('请再次检查密码');
+  } else if (value !== formState.password) {
+    return Promise.reject("两次输入密码不一致");
+  } else {
+    return Promise.resolve();
+  }
+};
 //当有输入内容时require为false=>小红点消失
 const usernameFlag= ref<boolean>(true)
 const passwordFlag= ref<boolean>(true)
@@ -169,6 +199,8 @@ async function sendCaptcha() {
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
+//颜色切换
+const themeColor = useThemeStore()
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <div class="header">
-      <router-link to="/menu/meeting_room_list"><h1>会议室预订系统</h1></router-link>
+      <router-link to="/menu/meeting_room_list"><h1 :style="{ color: themeColor.themeColor }">会议室预订系统</h1></router-link>
       <router-link to="/update_info">
         <!-- 头像组件 -->
         <a-dropdown placement="bottom">
@@ -13,10 +13,7 @@
                 <a href="javascript:;" @click="logout">退出登录</a>
               </a-menu-item>
               <a-menu-item>
-                <a href="javascript:;">修改信息</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:;">修改密码</a>
+                <router-link to="/update_password">修改密码</router-link>
               </a-menu-item>
             </a-menu>
           </template>
@@ -32,6 +29,7 @@
 <script setup lang="ts">
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
+import { useThemeStore } from "@/stores/themeToggle";
 
 //获取图片静态路径
 function getImageUrl() {
@@ -50,6 +48,7 @@ const logout = () => {
   localStorage.clear();
   router.push("/login");
 };
+const themeColor = useThemeStore();
 </script>
 
 <style lang="scss" scoped>

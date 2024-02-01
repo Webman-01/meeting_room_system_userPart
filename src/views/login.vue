@@ -9,7 +9,7 @@
       "
       :hoverable="true"
     >
-      <h1 class="title">会议室预订系统</h1>
+      <h1 class="title" :style="{ color: themeColor.themeColor }">会议室预订系统</h1>
       <a-form
         :model="formState"
         :colon="false"
@@ -58,6 +58,7 @@ import { reactive, ref } from "vue";
 import { login } from ".././utils/interfaces";
 import { message } from 'ant-design-vue';
 import { useRouter } from "vue-router";
+import { useThemeStore } from "@/stores/themeToggle";
 
 let $router = useRouter()
 
@@ -101,6 +102,7 @@ const passwordFlag= ref<boolean>(true)
 const changePassword = (requireString:string)=>{
   passwordFlag.value = requireString.trim() === '';
 }
+const themeColor = useThemeStore()
 </script>
 
 <style lang="scss" scoped>

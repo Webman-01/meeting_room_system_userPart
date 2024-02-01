@@ -15,6 +15,11 @@ const router = createRouter({
           component: () => import("../views/updateInfo.vue"),
         },
         {
+          path: "update_password",
+          name: "update_password",
+          component: () => import("../views/updatePassword.vue"),
+        },
+        {
           path: "menu",
           name: "menu",
           component: () => import("../views/menu.vue"),
@@ -42,11 +47,6 @@ const router = createRouter({
       path: "/register",
       name: "register",
       component: () => import("../views/register.vue"),
-    },
-    {
-      path: "/update_password",
-      name: "update_password",
-      component: () => import("../views/updatePassword.vue"),
     },
     {
       path: "/404",
