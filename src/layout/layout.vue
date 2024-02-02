@@ -1,35 +1,56 @@
 <template>
-  <div class="layout">
-    <div class="header">
-      <router-link to="/menu/meeting_room_list"><h1 :style="{ color: themeColor.themeColor }">会议室预订系统</h1></router-link>
-      <router-link to="/update_info">
-        <!-- 头像组件 -->
-        <a-dropdown placement="bottom">
+  <a-config-provider
+    :locale="locale"
+    :theme="{
+      algorithm: data.themeData,
+      token: { colorPrimary: data.themeCss },
+    }"
+  >
+    <Setting />
+    <div class="layout">
+      <div class="header">
+        <router-link to="/menu/meeting_room_list"
+          ><h1 :style="{ color: themeColor.themeColor }">
+            会议室预订系统
+          </h1></router-link
+        >
+        <router-link to="/update_info">
           <!-- 头像组件 -->
-          <a-avatar class="icon" :src="getImageUrl()" :size="50"> </a-avatar>
-          <template #overlay>
-            <a-menu>
-              <a-menu-item>
-                <a href="javascript:;" @click="logout">退出登录</a>
-              </a-menu-item>
-              <a-menu-item>
-                <router-link to="/update_password">修改密码</router-link>
-              </a-menu-item>
-            </a-menu>
-          </template>
-        </a-dropdown>
-      </router-link>
+          <a-dropdown placement="bottom">
+            <!-- 头像组件 -->
+            <a-avatar class="icon" :src="getImageUrl()" :size="50"> </a-avatar>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item>
+                  <a href="javascript:;" @click="logout">退出登录</a>
+                </a-menu-item>
+                <a-menu-item>
+                  <router-link to="/update_password">修改密码</router-link>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </router-link>
+      </div>
+      <div class="body">
+        <router-view></router-view>
+      </div>
     </div>
-    <div class="body">
-      <router-view></router-view>
-    </div>
-  </div>
+  </a-config-provider>
 </template>
 
 <script setup lang="ts">
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import { useThemeStore } from "@/stores/themeToggle";
+import { ref } from "vue";
+import dayjs from "dayjs";
+import zhCN from "ant-design-vue/es/locale/zh_CN";
+import "dayjs/locale/zh-cn";
+//中文化
+const locale = ref(zhCN);
+dayjs.locale("zh-cn");
+const data = useThemeStore();
 
 //获取图片静态路径
 function getImageUrl() {

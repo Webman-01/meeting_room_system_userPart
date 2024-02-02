@@ -50,6 +50,7 @@
         </a-form-item>
       </a-form>
     </a-card>
+    <Special class="special"/>
   </div>
 </template>
 
@@ -59,6 +60,7 @@ import { login } from ".././utils/interfaces";
 import { message } from 'ant-design-vue';
 import { useRouter } from "vue-router";
 import { useThemeStore } from "@/stores/themeToggle";
+import Special from '../components/Special.vue'
 
 let $router = useRouter()
 
@@ -78,7 +80,7 @@ const onFinish = async (values: any) => {
     if(res.status == 201 || res.status == 200){
       message.success('登录成功')
       //登录成功跳到首页
-      $router.push('/')
+      $router.push('/menu/meeting_room_list')
 
       //存储token
       localStorage.setItem('access_token',data.accessToken)
@@ -122,4 +124,11 @@ const themeColor = useThemeStore()
   color: black;
   margin-bottom: 50px;
 }
+.special{
+  z-index: -1;
+  position: fixed;
+  left: 0px;
+  top: 50px;
+}
+
 </style>
