@@ -86,6 +86,8 @@ const onFinish = async (values: any) => {
       localStorage.setItem('access_token',data.accessToken)
       localStorage.setItem('refresh_token',data.refreshToken)
       localStorage.setItem('user_info',JSON.stringify(data.userInfo))
+      //在用户信息仓库中存入username和nickName
+      
     }else{
       message.error(res.data.data || '系统繁忙,请稍后再试')
     }

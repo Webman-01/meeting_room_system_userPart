@@ -42,10 +42,10 @@
         :data-source="meetingRoomResult"
         :pagination="false"
       >
-        <!-- 预订状态 -->
         <template v-slot:bodyCell="{ column, record }">
+          <!-- 预订详情 -->
           <template v-if="column.dataIndex === 'isBooked'">
-            <a-tag color="green">可预定</a-tag>
+            <MeetingRoomBookingModal :meetingRoomNameFirst="record.name" />
           </template>
           <!-- 创建时间 -->
           <template v-if="column.dataIndex === 'createTime'">
@@ -53,11 +53,13 @@
           </template>
           <!-- 更新时间 -->
           <template v-if="column.dataIndex === 'updateTime'">
-            <div @click="print(record)">{{ formatTime(record.updateTime) }}</div>
+            <div @click="print(record)">
+              {{ formatTime(record.updateTime) }}
+            </div>
           </template>
           <!-- 操作 -->
           <template v-else-if="column.dataIndex === 'operate'">
-            <Modal :name="record.name" :meetingRoomId="record.id"/>
+            <Modal :name="record.name" :meetingRoomId="record.id" />
           </template>
         </template>
       </a-table>
@@ -73,12 +75,10 @@
 </template>
 <script lang="ts" setup>
 //测试
-const print = (record:any)=>{
+const print = (record: any) => {
   console.log(record);
-  console.log(JSON.parse((localStorage.getItem('user_info')) as string).id);
-  
-  
-}
+  console.log(JSON.parse(localStorage.getItem("user_info") as string).id);
+};
 import Modal from "../components/Modal.vue";
 import moment from "moment";
 import { reactive, ref, watchEffect } from "vue";
@@ -183,7 +183,7 @@ let columns = [
     dataIndex: "updateTime",
   },
   {
-    title: "预订状态",
+    title: "预订详情",
     dataIndex: "isBooked",
   },
   {

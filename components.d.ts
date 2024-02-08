@@ -8,7 +8,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AAvatar: typeof import('ant-design-vue/es')['Avatar']
+    ABadge: typeof import('ant-design-vue/es')['Badge']
     AButton: typeof import('ant-design-vue/es')['Button']
+    ACalendar: typeof import('ant-design-vue/es')['Calendar']
     ACard: typeof import('ant-design-vue/es')['Card']
     ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
     AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
@@ -29,7 +31,9 @@ declare module 'vue' {
     ATag: typeof import('ant-design-vue/es')['Tag']
     ATextarea: typeof import('ant-design-vue/es')['Textarea']
     AUpload: typeof import('ant-design-vue/es')['Upload']
+    Calendar: typeof import('./src/components/Calendar.vue')['default']
     Fire: typeof import('./src/components/Fire.vue')['default']
+    MeetingRoomBookingModal: typeof import('./src/components/MeetingRoomBookingModal.vue')['default']
     Modal: typeof import('./src/components/Modal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

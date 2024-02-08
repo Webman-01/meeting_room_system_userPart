@@ -207,3 +207,12 @@ export async function bookingAdd(booking: CreateBooking,userId:number) {
     id:userId
   });
 }
+//根据会议室名称获取预订情况
+export async function getBookingByMeetingRoomName(meetingRoomName: string) {
+  return await axiosInstance.get("/booking/list", {
+    params: {
+      meetingRoomName,
+    },
+  });
+}
+

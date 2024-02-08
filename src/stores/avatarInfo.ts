@@ -1,9 +1,10 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useAvatarInfoStore = defineStore('avatarInfo', {
+//用户的头像信息
+export const useAvatarInfoStore = defineStore("avatarInfo", {
   state: () => {
     return {
-     avatarUrl:''
-    }
+      avatarUrl: "",
+    };
   },
-})
+});

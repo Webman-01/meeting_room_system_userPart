@@ -212,7 +212,7 @@ const onFinish = async (values: RegisterUser) => {
   }
 
   const res = await register(values);
-  console.log(res);
+  
   if (res.status == 200 || res.status == 201) {
     message.success("注册成功");
     //路由跳转

@@ -25,7 +25,6 @@
           name="avatar"
           v-model:value="formState.avatar"
           style="margin-top: 20px"
-          :rules="[{ required: false, message: '请输入用户名' }]"
         >
           <!-- 头像组件 -->
           <Avatar :avatarInfo="formState.avatar"></Avatar>
@@ -99,10 +98,11 @@ const onFinish = async (values: UserInfo) => {
   //因为Avatar组件中只是修改了pinia仓库中的avatarUrl,这里的formState中avatar不会变，所以在传数据时要改下这个组件中formState.avatar的值
   values.avatar = avatarInfo.avatarUrl;
   const res = await updateUserInfo(values);
-  console.log(res);
+
   const { message: msg, data } = res.data;
   if (res.status == 200 || res.status == 201) {
     message.success("更新用户信息成功");
+    formState.email = ''
   } else {
     message.error(data || "系统繁忙,请稍后再试");
   }

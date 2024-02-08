@@ -22,6 +22,9 @@
             <template #overlay>
               <a-menu>
                 <a-menu-item>
+                   <div class="username">用户名: {{ username }}<br>昵称: {{ nickName }}</div>
+                  </a-menu-item>
+                <a-menu-item>
                   <a href="javascript:;" @click="logout">退出登录</a>
                 </a-menu-item>
                 <a-menu-item>
@@ -43,10 +46,11 @@
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import { useThemeStore } from "@/stores/themeToggle";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import dayjs from "dayjs";
 import zhCN from "ant-design-vue/es/locale/zh_CN";
 import "dayjs/locale/zh-cn";
+import { getUserInfo } from "@/utils/interfaces";
 //中文化
 const locale = ref(zhCN);
 dayjs.locale("zh-cn");
@@ -61,6 +65,25 @@ function getImageUrl() {
   const avatar = avatarInfo.avatar;
   return "http://localhost:3000/" + avatar;
 }
+//展示username和nickName
+const username = ref<string>()
+const nickName = ref<string>()
+//获取用户信息
+const getUserData = async()=>{
+  const res =  await getUserInfo()
+  const { data } = res.data
+  
+  if(res.status == 200 || res.status == 201){
+    username.value = data.username
+    nickName.value = data.nickName
+  }else{
+    throw Promise.reject(new Error())
+  }
+}
+
+watchEffect(()=>{
+  getUserData()
+})
 const router = useRouter();
 //登出
 const logout = () => {

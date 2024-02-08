@@ -10,8 +10,11 @@
       "
       :hoverable="true"
     >
-      <h1 class="title" :style="{ color: themeColor.themeColor }">会议室预订系统</h1>
+      <h1 class="title" :style="{ color: themeColor.themeColor }">
+        会议室预订系统
+      </h1>
       <a-form
+        ref="formRef"
         :model="formState"
         :colon="false"
         :label-col="{ span: 6 }"
@@ -61,7 +64,8 @@
           :rules="[
             {
               required: false,
-              message: '请输入6-12位且含有字母数字的密码',
+              trigger: 'change',
+              validator: validatePass,
             },
           ]"
         >
@@ -75,7 +79,13 @@
           label="确认密码"
           name="confirmPassword"
           v-model:value="formState.confirmPassword"
-          :rules="[{ required: false, message: '请再次输入密码' }]"
+          :rules="[
+            {
+              required: false,
+              trigger: 'change',
+              validator: validatePass2,
+            },
+          ]"
         >
           <a-input-password v-model:value="formState.confirmPassword" />
         </a-form-item>
@@ -93,15 +103,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { reactive } from "vue";
-import {
-  updatePassword,
-  updatePasswordCaptcha,
-} from ".././utils/interfaces";
+import { reactive, ref } from "vue";
+import { updatePassword, updatePasswordCaptcha } from ".././utils/interfaces";
 import { message } from "ant-design-vue";
 import type { UpdatePassword } from "../types/user.types";
 import { useRouter } from "vue-router";
 import { useThemeStore } from "@/stores/themeToggle";
+import type { Rule } from "ant-design-vue/es/form";
 
 let $router = useRouter();
 const formState = reactive<UpdatePassword>({
@@ -119,31 +127,62 @@ const onFinish = async (values: UpdatePassword) => {
   }
 
   const res = await updatePassword(values);
-  console.log(res);
-  const { message: msg, data } = res.data;
+
   if (res.status == 200 || res.status == 201) {
     message.success("修改密码成功");
+    formState.captcha = "";
     //路由跳转
     $router.push("/login");
   } else {
-    message.error(data || "系统繁忙,请稍后再试");
+    message.error("请正确填写信息");
   }
 };
 //发送验证码
 async function sendCaptcha() {
   const res = await updatePasswordCaptcha(formState.email);
-  console.log(res);
+
   if (res.status == 200 || res.status == 201) {
     message.success(res.data.data);
   } else {
-    message.error("系统繁忙,请稍后再试");
+    if (formState.email == "") {
+      message.error("验证码不能为空");
+    } else {
+      message.error("系统繁忙,请稍后再试");
+    }
   }
 }
 
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
-const themeColor = useThemeStore()
+const themeColor = useThemeStore();
+//密码校验
+const formRef = ref<any>();
+const validatePass = async (_rule: Rule, value: string) => {
+  //检查密码是否为空
+  if (value === "") {
+    return Promise.reject("密码不能为空");
+  }
+  //检查密码是否满足要求
+  else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,12}$/.test(value)) {
+    return Promise.reject("请输入6-12位且包含字母和数字的密码");
+  } else {
+    //检查当密码满足条件且再次输入的密码不为空时再次触发再次输入的表单验证
+    if (formState.confirmPassword !== "") {
+      formRef.value.validateFields("confirmPassword");
+    }
+    return Promise.resolve();
+  }
+};
+const validatePass2 = async (_rule: Rule, value: string) => {
+  if (value === "") {
+    return Promise.reject("请再次检查密码");
+  } else if (value !== formState.password) {
+    return Promise.reject("两次输入密码不一致");
+  } else {
+    return Promise.resolve();
+  }
+};
 </script>
 
 <style lang="scss" scoped>

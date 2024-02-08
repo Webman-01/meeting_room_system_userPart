@@ -47,7 +47,7 @@ const handleChange = (info: any) => {
     loading.value = false;
   }
   if (status === "done") {
-    console.log(info.file.response, "response");
+    // console.log(info.file.response, "response");
     //修改pinia中avatarUrl来回显
     useAvatarInfo.$patch({ avatarUrl: info.file.response.data });
     message.success(`${info.file.name} 文件上传成功`);
