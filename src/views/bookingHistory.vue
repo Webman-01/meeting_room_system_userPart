@@ -120,12 +120,13 @@
 </template>
 <script lang="ts" setup>
 import moment from "moment";
-import { reactive, ref, watchEffect } from "vue";
+import { onMounted, reactive, ref, watch, watchEffect } from "vue";
 import { message } from "ant-design-vue";
 import { TeamOutlined, HomeOutlined } from "@ant-design/icons-vue";
 import dayjs, { Dayjs } from "dayjs";
 import { bookingList, unbind } from "../utils/interfaces";
 import type { MeetingRoomSearchResult } from "../views/meetingRoomList.vue";
+import { debounce } from "@/utils/debounce_throttle/debounce";
 const disabledDate = (current: Dayjs) => {
   //禁用今天之前的日期
   return current && current < dayjs().startOf("day");
@@ -196,8 +197,11 @@ const getBookingList = async () => {
   }
 };
 //监视页面信息的变化
-watchEffect(async () => {
-  //调用接口函数获取页面信息
+const getData = debounce(getBookingList, 300);
+watch([searchBookingData, pageNo], () => {
+  getData();
+});
+onMounted(() => {
   getBookingList();
 });
 
@@ -222,12 +226,12 @@ const cancel = () => {
 };
 //重制功能
 const reset = () => {
-  searchBookingData.username = ''
-  searchBookingData.meetingRoomName = ''
-  searchBookingData.meetingRoomPosition = ''
-  searchBookingData.rangeStartTime = undefined,
-  searchBookingData.rangeEndTime = undefined
-}
+  searchBookingData.username = "";
+  searchBookingData.meetingRoomName = "";
+  searchBookingData.meetingRoomPosition = "";
+  (searchBookingData.rangeStartTime = undefined),
+    (searchBookingData.rangeEndTime = undefined);
+};
 let columns = [
   {
     title: "会议室名称",

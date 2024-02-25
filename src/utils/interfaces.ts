@@ -16,7 +16,7 @@ const axiosInstance = axios.create({
 });
 
 //refreshToken
-async function refreshToken() {
+export async function refreshToken() {
   //获取localStorage中的refresh_token发起刷新token请求获取新的access_token和refresh_token
   const res = await axiosInstance.get("/user/refresh", {
     params: {

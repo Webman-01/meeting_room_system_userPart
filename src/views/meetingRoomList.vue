@@ -81,7 +81,7 @@ const print = (record: any) => {
 };
 import Modal from "../components/Modal.vue";
 import moment from "moment";
-import { reactive, ref, watchEffect } from "vue";
+import { onMounted, reactive, ref, watch, watchEffect } from "vue";
 import { message } from "ant-design-vue";
 import {
   EditOutlined,
@@ -89,6 +89,7 @@ import {
   HomeOutlined,
 } from "@ant-design/icons-vue";
 import { meetingRoomList } from "../utils/interfaces";
+import { debounce } from "@/utils/debounce_throttle/debounce";
 interface SearchMeetingRoomData {
   name: string;
   capacity: string;
@@ -143,9 +144,12 @@ const getMeetingRoomList = async () => {
     message.error(data || "系统繁忙，请稍后再试");
   }
 };
+const getData = debounce(getMeetingRoomList, 300);
 //监视页面信息的变化
-watchEffect(async () => {
-  //调用接口函数获取页面信息
+watch([searchMeetingRoomData, pageNo], () => {
+  getData();
+});
+onMounted(() => {
   getMeetingRoomList();
 });
 
