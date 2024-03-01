@@ -51,6 +51,14 @@
       </a-form>
     </a-card>
     <Special class="special"/>
+    <!-- <a-alert
+      message="Error"
+      description="你的账户已被冻结"
+      type="error"
+      show-icon
+      v-show="isFrozenFlag"
+      
+    /> -->
   </div>
 </template>
 
@@ -78,6 +86,11 @@ const onFinish = async (values: any) => {
 
   const { code,message:msg,data} = res.data
     if(res.status == 201 || res.status == 200){
+      //isFrozen为true用户不能登录
+      if(data.userInfo.isFrozen){
+        message.error('你的账户已被冻结')
+        return
+      }
       message.success('登录成功')
       //登录成功跳到首页
       $router.push('/menu/meeting_room_list')
@@ -86,7 +99,6 @@ const onFinish = async (values: any) => {
       localStorage.setItem('access_token',data.accessToken)
       localStorage.setItem('refresh_token',data.refreshToken)
       localStorage.setItem('user_info',JSON.stringify(data.userInfo))
-      //在用户信息仓库中存入username和nickName
       
     }else{
       message.error(res.data.data || '系统繁忙,请稍后再试')
@@ -97,9 +109,11 @@ const onFinish = async (values: any) => {
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
-
+//是否提示冻结
+const isFrozenFlag= ref<boolean>(true)
 const usernameFlag= ref<boolean>(true)
 const passwordFlag= ref<boolean>(true)
+
   const changeUsername = (requireString:string)=>{
   usernameFlag.value = requireString.trim() === '';
 }
@@ -118,6 +132,7 @@ const themeColor = useThemeStore()
     display: flex;
     justify-content: space-between;
   }
+  
 }
 .title {
   font-size: 30px;
@@ -132,5 +147,4 @@ const themeColor = useThemeStore()
   left: 0px;
   top: 50px;
 }
-
 </style>

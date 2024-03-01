@@ -27,7 +27,11 @@ router.beforeEach(
         localStorage.clear();
         next("/login");
       } else {
-        next();
+        if (to.path == "/register" || to.path == "/login") {
+          next("/menu/meeting_room_list");
+        } else {
+          next();
+        }
       }
     }
   }
