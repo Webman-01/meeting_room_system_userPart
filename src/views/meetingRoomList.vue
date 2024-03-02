@@ -37,10 +37,13 @@
     </div>
     <!-- 会议室列表 -->
     <div>
-      <a-table
+      <PageList
         :columns="columns"
         :data-source="meetingRoomResult"
         :pagination="false"
+        a-pagination
+        v-model:current="pageNo"
+        :total="(totalCount / pageSize) * 10"
       >
         <template v-slot:bodyCell="{ column, record }">
           <!-- 预订详情 -->
@@ -53,7 +56,7 @@
           </template>
           <!-- 更新时间 -->
           <template v-if="column.dataIndex === 'updateTime'">
-            <div @click="print(record)">
+            <div>
               {{ formatTime(record.updateTime) }}
             </div>
           </template>
@@ -62,23 +65,11 @@
             <Modal :name="record.name" :meetingRoomId="record.id" />
           </template>
         </template>
-      </a-table>
-      <div class="pagination">
-        <a-pagination
-          v-model:current="pageNo"
-          :total="(totalCount / pageSize) * 10"
-          show-less-items
-        />
-      </div>
+      </PageList>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-//测试
-const print = (record: any) => {
-  console.log(record);
-  console.log(JSON.parse(localStorage.getItem("user_info") as string).id);
-};
 import Modal from "../components/Modal.vue";
 import moment from "moment";
 import { onMounted, reactive, ref, watch, watchEffect } from "vue";
@@ -89,6 +80,7 @@ import {
   HomeOutlined,
 } from "@ant-design/icons-vue";
 import { meetingRoomList } from "../utils/interfaces";
+import PageList from "@/components/PageList.vue";
 import { debounce } from "@/utils/debounce_throttle/debounce";
 interface SearchMeetingRoomData {
   name: string;

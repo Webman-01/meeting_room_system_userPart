@@ -54,10 +54,12 @@
     </div>
     <!-- 会议室列表 -->
     <div>
-      <a-table
+      <PageList
         :columns="columns"
         :data-source="bookingResult"
         :pagination="false"
+        v-model:current="pageNo"
+        :total="(totalCount / pageSize) * 10"
       >
         <template v-slot:bodyCell="{ column, record }">
           <!-- 会议室名称 -->
@@ -107,14 +109,7 @@
             </a-popconfirm>
           </template>
         </template>
-      </a-table>
-      <div class="pagination">
-        <a-pagination
-          v-model:current="pageNo"
-          :total="(totalCount / pageSize) * 10"
-          show-less-items
-        />
-      </div>
+      </PageList>
     </div>
   </div>
 </template>
@@ -127,6 +122,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { bookingList, unbind } from "../utils/interfaces";
 import type { MeetingRoomSearchResult } from "../views/meetingRoomList.vue";
 import { debounce } from "@/utils/debounce_throttle/debounce";
+import PageList from "@/components/PageList.vue";
 const disabledDate = (current: Dayjs) => {
   //禁用今天之前的日期
   return current && current < dayjs().startOf("day");
