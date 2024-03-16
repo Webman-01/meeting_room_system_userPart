@@ -143,12 +143,8 @@ async function sendCaptcha() {
 
   if (res.status == 200 || res.status == 201) {
     message.success(res.data.data);
-  } else {
-    if (formState.email == "") {
-      message.error("验证码不能为空");
-    } else {
+  } else { 
       message.error("系统繁忙,请稍后再试");
-    }
   }
 }
 

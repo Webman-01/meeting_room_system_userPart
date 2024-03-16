@@ -101,8 +101,11 @@ const onFinish = async (values: UserInfo) => {
 
   const { message: msg, data } = res.data;
   if (res.status == 200 || res.status == 201) {
+    const userInfo = JSON.parse(localStorage.getItem("user_info") as string);
+    //values.avatar是最新的，不能用formState
+    userInfo.avatar = values.avatar;
+    localStorage.setItem('user_info',JSON.stringify(userInfo))
     message.success("更新用户信息成功");
-    formState.email = ''
   } else {
     message.error(data || "系统繁忙,请稍后再试");
   }
@@ -110,7 +113,7 @@ const onFinish = async (values: UserInfo) => {
 //发送验证码
 async function sendCaptcha() {
   const res = await updateUserInfoCaptcha(); //直接根据jwt中的email发,不用传参数
-  console.log(res);
+  // console.log(res);
   if (res.status == 200 || res.status == 201) {
     message.success(res.data.data);
   } else {
